@@ -1,0 +1,7 @@
+{
+  "name": "Aura Skincare",
+  "description": "Your personal AI skincare assistant. Get a skin analysis from a selfie, including environmental advice, and receive personalized product recommendations.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
