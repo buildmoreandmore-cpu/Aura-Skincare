@@ -18,6 +18,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
           <div className="flex items-center">
             <span className="text-2xl font-light tracking-tight text-gray-900">Aura</span>
           </div>
+          <button
+            onClick={onGetStarted}
+            className="px-6 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 border border-gray-200 hover:border-cyan-300 rounded-full transition-all duration-300 hover:shadow-md hover:shadow-cyan-100"
+          >
+            Sign In
+          </button>
         </nav>
 
         {/* Hero Content */}
