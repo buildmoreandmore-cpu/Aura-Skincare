@@ -56,42 +56,46 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
   };
 
   const saveToJourney = async () => {
-    if (!user || images.length === 0 || !result) return;
+    if (!user || images.length === 0 || !result) {
+      setError('Please complete an analysis first');
+      return;
+    }
 
     setSaving(true);
+    setError(null);
+
     try {
-      // Upload image to Supabase Storage
+      // Convert image to base64 and save directly to database
       const file = images[0].file;
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+      const reader = new FileReader();
 
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('skin-photos')
-        .upload(fileName, file);
+      const base64Image = await new Promise<string>((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
 
-      if (uploadError) throw uploadError;
-
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('skin-photos')
-        .getPublicUrl(fileName);
-
-      // Save to database
-      const { error: dbError } = await supabase
+      // Save to database with base64 image
+      const { data, error: dbError } = await supabase
         .from('skin_journey')
         .insert({
           user_id: user.id,
-          image_url: publicUrl,
+          image_url: base64Image,
           analysis_result: result
-        });
+        })
+        .select();
 
-      if (dbError) throw dbError;
+      if (dbError) {
+        console.error('Database error:', dbError);
+        throw new Error(`Database error: ${dbError.message}`);
+      }
 
       await loadSavedPhotos();
       alert('Photo saved to your skin journey!');
+      setShowJourney(true);
     } catch (err: any) {
-      console.error(err);
-      setError('Failed to save photo: ' + err.message);
+      console.error('Save error:', err);
+      setError('Failed to save photo: ' + (err.message || 'Unknown error'));
     } finally {
       setSaving(false);
     }
