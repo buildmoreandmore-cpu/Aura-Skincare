@@ -83,15 +83,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         </button>
 
         <div className="p-10">
-          {/* Logo */}
-          <div className="flex items-center justify-center mb-8">
-            <div className="w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-2xl flex items-center justify-center">
-              <span className="text-white font-bold text-2xl">A</span>
-            </div>
-          </div>
-
           {/* Title */}
-          <h2 className="text-3xl font-light text-center text-gray-900 mb-2">
+          <h2 className="text-3xl font-light text-center text-gray-900 mb-2 mt-4">
             {isSignUp ? 'Create account' : 'Welcome back'}
           </h2>
           <p className="text-center text-gray-500 mb-8 font-light">

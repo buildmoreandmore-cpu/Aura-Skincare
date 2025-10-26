@@ -13,10 +13,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Navigation */}
         <nav className="flex items-center justify-between py-8 animate-fade-in">
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-2xl flex items-center justify-center">
-              <span className="text-white font-bold text-xl">A</span>
-            </div>
+          <div className="flex items-center">
             <span className="text-2xl font-light tracking-tight text-gray-900">Aura</span>
           </div>
         </nav>

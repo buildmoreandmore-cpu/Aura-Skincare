@@ -36,10 +36,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
     <header className="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50 border-b border-gray-100">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-2xl flex items-center justify-center">
-              <span className="text-white font-bold text-xl">A</span>
-            </div>
+          <div className="flex items-center">
             <h1 className="text-2xl font-light tracking-tight text-gray-900">
               Aura
             </h1>
