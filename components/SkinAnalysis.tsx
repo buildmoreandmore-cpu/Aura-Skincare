@@ -50,13 +50,13 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
   };
 
   const dropzoneStyles: React.CSSProperties = {
-    border: '2px dashed #67E8F9',
+    border: '1px solid #E5E7EB',
     borderRadius: '0.75rem',
     padding: '2rem',
     textAlign: 'center',
     cursor: 'pointer',
-    transition: 'background-color 0.2s ease-in-out',
-    backgroundColor: '#F0FDFA'
+    transition: 'all 0.2s ease-in-out',
+    backgroundColor: '#F9FAFB'
   };
 
   return (
