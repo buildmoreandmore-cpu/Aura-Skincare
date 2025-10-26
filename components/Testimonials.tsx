@@ -5,7 +5,7 @@ const Testimonials: React.FC = () => {
     {
       id: 1,
       name: "Sarah Chen",
-      role: "Skincare Enthusiast",
+      role: "AI Model",
       image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&auto=format",
       quote: "Aura completely transformed my skincare routine. The AI analysis was incredibly accurate and the personalized recommendations actually work.",
       rating: 5
@@ -13,7 +13,7 @@ const Testimonials: React.FC = () => {
     {
       id: 2,
       name: "Naomi Williams",
-      role: "Beauty Blogger",
+      role: "AI Model",
       image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop&auto=format",
       quote: "Finally, a skincare app that understands my skin type. The environmental insights based on my location are a game-changer.",
       rating: 5
@@ -21,7 +21,7 @@ const Testimonials: React.FC = () => {
     {
       id: 3,
       name: "Jessica Park",
-      role: "Wellness Coach",
+      role: "AI Model",
       image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&auto=format",
       quote: "I've tried countless products, but Aura's AI-powered analysis helped me find exactly what my skin needs. My complexion has never looked better.",
       rating: 5
