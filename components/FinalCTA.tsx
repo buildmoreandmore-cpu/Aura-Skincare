@@ -50,14 +50,6 @@ const FinalCTA: React.FC<FinalCTAProps> = ({ onStartAnalysis }) => {
             className="group inline-flex items-center justify-center px-10 py-5 text-lg font-medium text-gray-700 bg-white border-2 border-gray-200 rounded-full hover:border-cyan-300 hover:bg-cyan-50/50 transition-all duration-300 hover:scale-105 hover:shadow-xl w-full sm:w-auto"
           >
             Shop Recommendations
-            <svg
-              className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
           </button>
         </div>
 
