@@ -4,19 +4,19 @@ const Testimonials: React.FC = () => {
   const portraits = [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=600&h=800&fit=crop&auto=format",
+      image: "https://images.unsplash.com/photo-1619895092538-128341789043?w=600&h=800&fit=crop&auto=format",
     },
     {
       id: 2,
-      image: "https://images.unsplash.com/photo-1598901045097-022424b50c60?w=600&h=800&fit=crop&auto=format",
+      image: "https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?w=600&h=800&fit=crop&auto=format",
     },
     {
       id: 3,
-      image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&h=800&fit=crop&auto=format",
+      image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&h=800&fit=crop&auto=format",
     },
     {
       id: 4,
-      image: "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=600&h=800&fit=crop&auto=format",
+      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=800&fit=crop&auto=format",
     }
   ];
 
