@@ -223,11 +223,30 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6">
-              {savedPhotos.map((photo) => (
+              {savedPhotos.map((photo) => {
+                console.log('Photo data:', {
+                  id: photo.id,
+                  has_image: !!photo.image_url,
+                  image_length: photo.image_url?.length,
+                  image_preview: photo.image_url?.substring(0, 100)
+                });
+                return (
                 <div key={photo.id} className="bg-white rounded-2xl shadow-lg overflow-hidden">
                   <div className="md:flex">
-                    {photo.image_url && (
-                      <img src={photo.image_url} alt="Skin journey" className="w-full md:w-1/3 h-64 object-cover" />
+                    {photo.image_url && photo.image_url.length > 0 ? (
+                      <img
+                        src={photo.image_url}
+                        alt="Skin journey"
+                        className="w-full md:w-1/3 h-64 object-cover"
+                        onError={(e) => {
+                          console.error('Image failed to load:', photo.image_url?.substring(0, 100));
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full md:w-1/3 h-64 bg-gray-200 flex items-center justify-center">
+                        <p className="text-gray-500">No image</p>
+                      </div>
                     )}
                     <div className="p-6 flex-1">
                       <p className="text-sm text-gray-500 mb-4">
@@ -267,7 +286,8 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
                     </div>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
