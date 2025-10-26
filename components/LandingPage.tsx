@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Testimonials from './Testimonials';
 import FAQ from './FAQ';
+import BeforeAfter from './BeforeAfter';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -11,36 +12,48 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-cyan-50/30 to-white overflow-hidden">
-      {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Navigation */}
-        <nav className="flex items-center justify-between py-8 animate-fade-in">
-          <div className="flex items-center">
-            <span className="text-2xl font-light tracking-tight text-gray-900">Aura</span>
-          </div>
-          <button
-            onClick={onGetStarted}
-            className="px-6 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 border border-gray-200 hover:border-cyan-300 rounded-full transition-all duration-300 hover:shadow-md hover:shadow-cyan-100"
-          >
-            Sign In
-          </button>
-        </nav>
+      {/* Hero Section with Background */}
+      <div className="relative min-h-screen">
+        {/* Cinematic Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=1920&h=1080&fit=crop&auto=format"
+            alt="Natural luminous skin"
+            className="w-full h-full object-cover opacity-30"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/60 to-white" />
+        </div>
 
-        {/* Hero Content */}
-        <div className="mt-20 md:mt-32 text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          <h1 className="text-5xl md:text-7xl font-extralight tracking-tight text-gray-900 leading-tight">
-            Your skin,
-            <br />
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent font-light">
-              scientifically analyzed
-            </span>
-          </h1>
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Navigation */}
+          <nav className="flex items-center justify-between py-8 animate-fade-in">
+            <div className="flex items-center">
+              <span className="text-2xl font-light tracking-tight text-gray-900">Aura</span>
+            </div>
+            <button
+              onClick={onGetStarted}
+              className="px-6 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 border border-gray-200 hover:border-cyan-300 rounded-full transition-all duration-300 hover:shadow-md hover:shadow-cyan-100 bg-white/80 backdrop-blur-sm"
+            >
+              Sign In
+            </button>
+          </nav>
 
-          <p className="mt-8 text-xl md:text-2xl text-gray-600 font-light max-w-3xl mx-auto leading-relaxed">
-            Advanced AI technology meets personalized skincare.
-            <br />
-            Discover your perfect routine in seconds.
-          </p>
+          {/* Hero Content */}
+          <div className="mt-20 md:mt-32 text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <h1 className="text-5xl md:text-7xl font-extralight tracking-tight text-gray-900 leading-tight">
+              Your skin,
+              <br />
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent font-light">
+                scientifically analyzed
+              </span>
+            </h1>
+
+            <p className="mt-8 text-xl md:text-2xl text-gray-600 font-light max-w-3xl mx-auto leading-relaxed">
+              Advanced AI technology meets personalized skincare.
+              <br />
+              Discover your perfect routine in seconds.
+            </p>
 
           <button
             onClick={onGetStarted}
@@ -117,7 +130,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
             </p>
           </div>
         </div>
+        </div>
       </div>
+
+      {/* Before/After Showcase */}
+      <BeforeAfter />
 
       {/* Testimonials Section */}
       <Testimonials />
