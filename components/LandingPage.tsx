@@ -132,7 +132,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
         </div>
         </div>
       </div>
-      </div>
 
       {/* Testimonials Section */}
       <Testimonials />
