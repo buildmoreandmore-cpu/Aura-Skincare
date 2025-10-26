@@ -52,10 +52,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin,
+          redirectTo: `${window.location.origin}`,
         },
       });
       if (error) throw error;
+      // Don't set loading to false here - let the redirect happen
     } catch (err: any) {
       setError(err.message || 'An error occurred');
       setLoading(false);
