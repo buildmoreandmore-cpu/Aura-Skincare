@@ -57,48 +57,25 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
               Discover your perfect routine in seconds.
             </p>
 
-          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={onGetStarted}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-              className="group relative inline-flex items-center justify-center px-12 py-5 text-lg font-medium text-white bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-200/50"
-            >
-              <span className="relative z-10 flex items-center">
-                Get Started
-                <svg
-                  className={`ml-2 w-5 h-5 transition-transform duration-300 ${isHovered ? 'translate-x-1' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </button>
-
-            <button
-              onClick={() => setShowQuestionnaire(true)}
-              className="group inline-flex items-center justify-center px-12 py-5 text-lg font-medium text-gray-700 bg-white border-2 border-gray-200 rounded-full hover:border-cyan-300 hover:bg-cyan-50/50 transition-all duration-300 hover:scale-105 hover:shadow-xl"
-            >
-              <span className="flex items-center">
-                Quick Assessment
-                <svg
-                  className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-              </span>
-            </button>
-          </div>
-
-          <p className="mt-6 text-sm text-gray-500 font-light">
-            No sign-up required for quick assessment
-          </p>
+          <button
+            onClick={onGetStarted}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className="mt-12 group relative inline-flex items-center justify-center px-12 py-5 text-lg font-medium text-white bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-200/50"
+          >
+            <span className="relative z-10 flex items-center">
+              Get Started
+              <svg
+                className={`ml-2 w-5 h-5 transition-transform duration-300 ${isHovered ? 'translate-x-1' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </button>
         </div>
 
         {/* Feature Cards */}
