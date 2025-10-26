@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Testimonials from './Testimonials';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -97,6 +98,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
           </div>
         </div>
       </div>
+
+      {/* Testimonials Section */}
+      <Testimonials />
 
       {/* Decorative gradient orbs */}
       <div className="fixed top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-200/20 to-blue-200/20 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDuration: '4s' }} />
