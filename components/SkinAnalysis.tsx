@@ -57,7 +57,22 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
   };
 
   const saveToJourney = async () => {
-    if (!user || images.length === 0 || !result) {
+    console.log('Save button clicked');
+    console.log('User:', user);
+    console.log('Images:', images.length);
+    console.log('Result:', result);
+
+    if (!user) {
+      setError('You must be signed in to save photos');
+      return;
+    }
+
+    if (images.length === 0) {
+      setError('No image to save');
+      return;
+    }
+
+    if (!result) {
       setError('Please complete an analysis first');
       return;
     }
@@ -66,6 +81,8 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
     setError(null);
 
     try {
+      console.log('Starting save process...');
+
       // Convert image to base64 and save directly to database
       const file = images[0].file;
       const reader = new FileReader();
@@ -75,6 +92,8 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
+
+      console.log('Image converted to base64, length:', base64Image.length);
 
       // Save to database with base64 image
       const { data, error: dbError } = await supabase
@@ -91,12 +110,15 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
         throw new Error(`Database error: ${dbError.message}`);
       }
 
+      console.log('Save successful:', data);
+
       await loadSavedPhotos();
-      alert('Photo saved to your skin journey!');
+      setError('✅ Photo saved successfully! Check "My Skin Journey" tab.');
+      setTimeout(() => setError(null), 5000);
       setShowJourney(true);
     } catch (err: any) {
       console.error('Save error:', err);
-      setError('Failed to save photo: ' + (err.message || 'Unknown error'));
+      setError('❌ Failed to save photo: ' + (err.message || 'Unknown error'));
     } finally {
       setSaving(false);
     }
