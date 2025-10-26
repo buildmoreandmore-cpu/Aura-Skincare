@@ -12,9 +12,9 @@ const Testimonials: React.FC = () => {
     },
     {
       id: 2,
-      name: "Emily Rodriguez",
+      name: "Naomi Williams",
       role: "Beauty Blogger",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&auto=format",
+      image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop&auto=format",
       quote: "Finally, a skincare app that understands my skin type. The environmental insights based on my location are a game-changer.",
       rating: 5
     },
