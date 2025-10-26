@@ -88,10 +88,12 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
           {imagePreview ? (
             <img src={imagePreview} alt="Your selfie" className="mx-auto h-64 w-64 object-cover rounded-lg" />
           ) : (
-            <div className="text-cyan-700">
-              <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1-1m6-3l2 2m-1.5-7.5l-3-3m0 0l-3 3m3-3v12" /></svg>
-              <p className="mt-2 font-semibold">Click to upload or drag & drop</p>
-              <p className="text-sm">PNG, JPG, or WEBP</p>
+            <div className="text-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+              </svg>
+              <p className="mt-4 font-light text-lg">Click to upload or drag & drop</p>
+              <p className="text-sm text-gray-500 font-light mt-1">PNG, JPG, or WEBP</p>
             </div>
           )}
         </label>
