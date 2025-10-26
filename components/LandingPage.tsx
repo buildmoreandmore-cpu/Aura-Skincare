@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Testimonials from './Testimonials';
 import FAQ from './FAQ';
 import BeforeAfter from './BeforeAfter';
+import FinalCTA from './FinalCTA';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -141,6 +142,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
 
       {/* FAQ Section */}
       <FAQ />
+
+      {/* Final CTA Section */}
+      <FinalCTA onStartAnalysis={onGetStarted} />
 
       {/* Decorative gradient orbs */}
       <div className="fixed top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-200/20 to-blue-200/20 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDuration: '4s' }} />
