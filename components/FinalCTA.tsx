@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
+import QuestionnaireModal from './QuestionnaireModal';
 
 interface FinalCTAProps {
   onStartAnalysis: () => void;
 }
 
 const FinalCTA: React.FC<FinalCTAProps> = ({ onStartAnalysis }) => {
+  const [showQuestionnaire, setShowQuestionnaire] = useState(false);
+
   return (
     <div className="relative py-32 bg-gradient-to-b from-white via-cyan-50/40 to-blue-50/60 overflow-hidden">
       {/* Decorative Elements */}
@@ -47,9 +50,10 @@ const FinalCTA: React.FC<FinalCTAProps> = ({ onStartAnalysis }) => {
           </button>
 
           <button
+            onClick={() => setShowQuestionnaire(true)}
             className="group inline-flex items-center justify-center px-10 py-5 text-lg font-medium text-gray-700 bg-white border-2 border-gray-200 rounded-full hover:border-cyan-300 hover:bg-cyan-50/50 transition-all duration-300 hover:scale-105 hover:shadow-xl w-full sm:w-auto"
           >
-            Shop Recommendations
+            Quick Assessment
           </button>
         </div>
 
@@ -75,6 +79,9 @@ const FinalCTA: React.FC<FinalCTAProps> = ({ onStartAnalysis }) => {
           </div>
         </div>
       </div>
+
+      {/* Questionnaire Modal */}
+      <QuestionnaireModal isOpen={showQuestionnaire} onClose={() => setShowQuestionnaire(false)} />
     </div>
   );
 };
