@@ -21,6 +21,7 @@ interface SavedPhoto {
   image_url: string;
   created_at: string;
   analysis_result?: SkinAnalysisResult;
+  product_recommendations?: any;
 }
 
 const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
@@ -199,30 +200,49 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
               <p className="mt-2 text-sm text-gray-500">Complete an analysis and save your photos to track your progress</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               {savedPhotos.map((photo) => (
                 <div key={photo.id} className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                  <img src={photo.image_url} alt="Skin journey" className="w-full h-64 object-cover" />
-                  <div className="p-4">
-                    <p className="text-sm text-gray-500 mb-2">
-                      {new Date(photo.created_at).toLocaleDateString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
-                    </p>
-                    {photo.analysis_result && (
-                      <div className="space-y-2">
-                        <p className="text-sm"><span className="font-semibold text-cyan-600">Type:</span> {photo.analysis_result.skinType}</p>
-                        <div className="flex flex-wrap gap-1">
-                          {photo.analysis_result.concerns.map((concern, idx) => (
-                            <span key={idx} className="px-2 py-1 bg-cyan-50 text-cyan-700 text-xs rounded-full">
-                              {concern}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
+                  <div className="md:flex">
+                    {photo.image_url && (
+                      <img src={photo.image_url} alt="Skin journey" className="w-full md:w-1/3 h-64 object-cover" />
                     )}
+                    <div className="p-6 flex-1">
+                      <p className="text-sm text-gray-500 mb-4">
+                        {new Date(photo.created_at).toLocaleDateString('en-US', {
+                          month: 'long',
+                          day: 'numeric',
+                          year: 'numeric',
+                          hour: 'numeric',
+                          minute: '2-digit'
+                        })}
+                      </p>
+
+                      {photo.analysis_result && (
+                        <div className="mb-4">
+                          <h4 className="font-semibold text-gray-900 mb-2">Analysis</h4>
+                          <p className="text-sm mb-2"><span className="font-semibold text-cyan-600">Skin Type:</span> {photo.analysis_result.skinType}</p>
+                          <div className="flex flex-wrap gap-1">
+                            {photo.analysis_result.concerns.map((concern, idx) => (
+                              <span key={idx} className="px-2 py-1 bg-cyan-50 text-cyan-700 text-xs rounded-full">
+                                {concern}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {photo.product_recommendations && (
+                        <div className="mt-4 pt-4 border-t border-gray-200">
+                          <h4 className="font-semibold text-gray-900 mb-3">Recommended Products</h4>
+                          <div className="space-y-2 text-sm">
+                            <p><span className="font-semibold text-cyan-600">Cleanser:</span> {photo.product_recommendations.cleanser?.name}</p>
+                            <p><span className="font-semibold text-cyan-600">Serum:</span> {photo.product_recommendations.serum?.name}</p>
+                            <p><span className="font-semibold text-cyan-600">Moisturizer:</span> {photo.product_recommendations.moisturizer?.name}</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

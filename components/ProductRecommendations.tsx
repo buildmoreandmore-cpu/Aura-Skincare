@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { getRecommendations } from '../services/geminiService';
 import { SkinAnalysisResult, Product } from '../types';
 import LoadingSpinner from './LoadingSpinner';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 
 interface ProductRecommendationsProps {
   analysisResult: SkinAnalysisResult | null;
@@ -47,6 +49,7 @@ const ProductRecommendations: React.FC<ProductRecommendationsProps> = ({ analysi
   const [recommendations, setRecommendations] = useState<Recommendations | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     if (analysisResult) {
@@ -54,14 +57,36 @@ const ProductRecommendations: React.FC<ProductRecommendationsProps> = ({ analysi
       setError(null);
       setRecommendations(null);
       getRecommendations(analysisResult)
-        .then(setRecommendations)
+        .then(async (recs) => {
+          setRecommendations(recs);
+
+          // Save recommendations to database
+          if (user) {
+            try {
+              const { error: saveError } = await supabase
+                .from('skin_journey')
+                .insert({
+                  user_id: user.id,
+                  image_url: '', // Empty for recommendations-only entries
+                  analysis_result: analysisResult,
+                  product_recommendations: recs
+                });
+
+              if (saveError) {
+                console.error('Failed to save recommendations:', saveError);
+              }
+            } catch (err) {
+              console.error('Error saving recommendations:', err);
+            }
+          }
+        })
         .catch(err => {
             console.error(err);
             setError('Could not fetch recommendations. Please try again.');
         })
         .finally(() => setLoading(false));
     }
-  }, [analysisResult]);
+  }, [analysisResult, user]);
 
   if (!analysisResult) {
     return (

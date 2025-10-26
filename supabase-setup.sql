@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS skin_journey (
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   image_url TEXT NOT NULL,
   analysis_result JSONB,
+  product_recommendations JSONB,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
