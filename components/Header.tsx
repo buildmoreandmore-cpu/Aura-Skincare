@@ -10,6 +10,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
   const tabs: { id: Tab; name: string }[] = [
     { id: 'analysis', name: 'Skin Analysis' },
     { id: 'recommendations', name: 'Recommendations' },
+    { id: 'history', name: 'History' },
   ];
 
   const NavItem: React.FC<{ tab: { id: Tab; name:string } }> = ({ tab }) => {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getRecommendations } from '../services/geminiService';
+import { saveRecommendation } from '../services/historyService';
 import { SkinAnalysisResult, Product } from '../types';
 import LoadingSpinner from './LoadingSpinner';
 
@@ -42,7 +43,11 @@ const ProductRecommendations: React.FC<ProductRecommendationsProps> = ({ analysi
       setError(null);
       setRecommendations(null);
       getRecommendations(analysisResult)
-        .then(setRecommendations)
+        .then(recs => {
+          setRecommendations(recs);
+          // Save to history
+          saveRecommendation(analysisResult, recs);
+        })
         .catch(err => {
             console.error(err);
             setError('Could not fetch recommendations. Please try again.');

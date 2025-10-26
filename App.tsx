@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from './components/Header';
 import SkinAnalysis from './components/SkinAnalysis';
 import ProductRecommendations from './components/ProductRecommendations';
+import RecommendationHistory from './components/RecommendationHistory';
 import { Tab, SkinAnalysisResult } from './types';
 
 const App: React.FC = () => {
@@ -19,6 +20,8 @@ const App: React.FC = () => {
         return <SkinAnalysis onAnalysisComplete={handleAnalysisComplete} />;
       case 'recommendations':
         return <ProductRecommendations analysisResult={analysisResult} />;
+      case 'history':
+        return <RecommendationHistory />;
       default:
         return <SkinAnalysis onAnalysisComplete={handleAnalysisComplete} />;
     }
