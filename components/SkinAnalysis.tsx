@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { analyzeSkin } from '../services/geminiService';
 import { SkinAnalysisResult } from '../types';
 import LoadingSpinner from './LoadingSpinner';
 import useGeolocation from '../hooks/useGeolocation';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 
 interface SkinAnalysisProps {
   onAnalysisComplete: (result: SkinAnalysisResult) => void;
@@ -14,12 +16,86 @@ interface ImageData {
   id: string;
 }
 
+interface SavedPhoto {
+  id: string;
+  image_url: string;
+  created_at: string;
+  analysis_result?: SkinAnalysisResult;
+}
+
 const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
   const [images, setImages] = useState<ImageData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<SkinAnalysisResult | null>(null);
+  const [savedPhotos, setSavedPhotos] = useState<SavedPhoto[]>([]);
+  const [showJourney, setShowJourney] = useState<boolean>(false);
+  const [saving, setSaving] = useState<boolean>(false);
   const location = useGeolocation();
+  const { user } = useAuth();
+
+  // Load saved photos
+  useEffect(() => {
+    if (user) {
+      loadSavedPhotos();
+    }
+  }, [user]);
+
+  const loadSavedPhotos = async () => {
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from('skin_journey')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false });
+
+    if (!error && data) {
+      setSavedPhotos(data);
+    }
+  };
+
+  const saveToJourney = async () => {
+    if (!user || images.length === 0 || !result) return;
+
+    setSaving(true);
+    try {
+      // Upload image to Supabase Storage
+      const file = images[0].file;
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('skin-photos')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('skin-photos')
+        .getPublicUrl(fileName);
+
+      // Save to database
+      const { error: dbError } = await supabase
+        .from('skin_journey')
+        .insert({
+          user_id: user.id,
+          image_url: publicUrl,
+          analysis_result: result
+        });
+
+      if (dbError) throw dbError;
+
+      await loadSavedPhotos();
+      alert('Photo saved to your skin journey!');
+    } catch (err: any) {
+      console.error(err);
+      setError('Failed to save photo: ' + err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -78,10 +154,84 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
 
   return (
     <div className="max-w-2xl mx-auto p-4 md:p-8">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-extrabold text-gray-900">Get Your Personalized Skin Analysis</h2>
-        <p className="mt-2 text-lg text-gray-600">Upload a clear, well-lit selfie to get started.</p>
+      {/* Toggle between analysis and journey */}
+      <div className="flex justify-center gap-4 mb-8">
+        <button
+          onClick={() => setShowJourney(false)}
+          className={`px-6 py-2 rounded-full font-medium transition-all ${
+            !showJourney
+              ? 'bg-gradient-to-r from-cyan-400 to-blue-400 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          New Analysis
+        </button>
+        <button
+          onClick={() => setShowJourney(true)}
+          className={`px-6 py-2 rounded-full font-medium transition-all ${
+            showJourney
+              ? 'bg-gradient-to-r from-cyan-400 to-blue-400 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          My Skin Journey ({savedPhotos.length})
+        </button>
       </div>
+
+      {showJourney ? (
+        /* Skin Journey View */
+        <div>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-extrabold text-gray-900">My Skin Journey</h2>
+            <p className="mt-2 text-lg text-gray-600">Track your skin progress over time</p>
+          </div>
+
+          {savedPhotos.length === 0 ? (
+            <div className="text-center py-12 bg-gray-50 rounded-2xl">
+              <svg className="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <p className="mt-4 text-gray-600">No photos saved yet</p>
+              <p className="mt-2 text-sm text-gray-500">Complete an analysis and save your photos to track your progress</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {savedPhotos.map((photo) => (
+                <div key={photo.id} className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                  <img src={photo.image_url} alt="Skin journey" className="w-full h-64 object-cover" />
+                  <div className="p-4">
+                    <p className="text-sm text-gray-500 mb-2">
+                      {new Date(photo.created_at).toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </p>
+                    {photo.analysis_result && (
+                      <div className="space-y-2">
+                        <p className="text-sm"><span className="font-semibold text-cyan-600">Type:</span> {photo.analysis_result.skinType}</p>
+                        <div className="flex flex-wrap gap-1">
+                          {photo.analysis_result.concerns.map((concern, idx) => (
+                            <span key={idx} className="px-2 py-1 bg-cyan-50 text-cyan-700 text-xs rounded-full">
+                              {concern}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        /* Analysis View */
+        <>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-extrabold text-gray-900">Get Your Personalized Skin Analysis</h2>
+            <p className="mt-2 text-lg text-gray-600">Upload a clear, well-lit selfie to get started.</p>
+          </div>
 
       {/* Image Gallery */}
       {images.length > 0 && (
@@ -173,8 +323,19 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
                     <p className="mt-1 text-gray-600">{result.environmentalAdvice}</p>
                 </div>
             </div>
-            <p className="mt-6 text-sm text-gray-500">Go to the Recommendations tab to see your personalized product suggestions.</p>
+            <div className="mt-6 flex gap-4">
+              <button
+                onClick={saveToJourney}
+                disabled={saving}
+                className="flex-1 bg-gradient-to-r from-green-400 to-emerald-400 text-white font-medium py-3 rounded-lg hover:shadow-lg transition-all disabled:opacity-50"
+              >
+                {saving ? 'Saving...' : 'Save to My Journey'}
+              </button>
+            </div>
+            <p className="mt-4 text-sm text-gray-500">Go to the Recommendations tab to see your personalized product suggestions.</p>
         </div>
+      )}
+        </>
       )}
     </div>
   );
