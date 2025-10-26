@@ -1,7 +1,15 @@
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 import { SkinAnalysisResult, Product } from '../types';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Lazy initialization to prevent crashes on app load
+let ai: GoogleGenAI | null = null;
+
+const getAI = () => {
+  if (!ai) {
+    ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  }
+  return ai;
+};
 
 // Helper function to convert File to a Gemini GenerativePart
 const fileToGenerativePart = async (file: File) => {
@@ -29,7 +37,7 @@ export const analyzeSkin = async (imageFile: File, latitude: number | null, long
       promptText += ` Also, provide general environmental skincare advice as the user's location is not available.`
   }
 
-  const response = await ai.models.generateContent({
+  const response = await getAI().models.generateContent({
     model: 'gemini-2.5-flash',
     contents: {
         parts: [
@@ -80,7 +88,7 @@ export const getRecommendations = async (analysisResult: SkinAnalysisResult): Pr
     required: ['name', 'description', 'ingredients']
   };
 
-  const response = await ai.models.generateContent({
+  const response = await getAI().models.generateContent({
     model: 'gemini-2.5-flash',
     contents: prompt,
     config: {
