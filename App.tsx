@@ -1,39 +1,39 @@
 import React, { useState } from 'react';
-import Header from './components/Header';
-import SkinAnalysis from './components/SkinAnalysis';
-import ProductRecommendations from './components/ProductRecommendations';
-import RecommendationHistory from './components/RecommendationHistory';
-import { Tab, SkinAnalysisResult } from './types';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import LandingPage from './components/LandingPage';
+import AuthModal from './components/AuthModal';
+import ProtectedApp from './components/ProtectedApp';
+import LoadingSpinner from './components/LoadingSpinner';
+
+const AppContent: React.FC = () => {
+  const { user, loading } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <>
+        <LandingPage onGetStarted={() => setShowAuthModal(true)} />
+        <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      </>
+    );
+  }
+
+  return <ProtectedApp />;
+};
 
 const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<Tab>('analysis');
-  const [analysisResult, setAnalysisResult] = useState<SkinAnalysisResult | null>(null);
-
-  const handleAnalysisComplete = (result: SkinAnalysisResult) => {
-    setAnalysisResult(result);
-    setActiveTab('recommendations'); // Switch to recommendations tab after analysis
-  };
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'analysis':
-        return <SkinAnalysis onAnalysisComplete={handleAnalysisComplete} />;
-      case 'recommendations':
-        return <ProductRecommendations analysisResult={analysisResult} />;
-      case 'history':
-        return <RecommendationHistory />;
-      default:
-        return <SkinAnalysis onAnalysisComplete={handleAnalysisComplete} />;
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
-      <main>
-        {renderContent()}
-      </main>
-    </div>
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 };
 
