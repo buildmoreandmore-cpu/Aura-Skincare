@@ -61,10 +61,6 @@ const Testimonials: React.FC = () => {
           ))}
         </div>
 
-        {/* Bottom Text */}
-        <div className="text-center text-sm text-gray-500 font-light animate-fade-in" style={{ animationDelay: '0.5s' }}>
-          Click any image to view in full size
-        </div>
       </div>
     </div>
   );
