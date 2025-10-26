@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Testimonials from './Testimonials';
 import FAQ from './FAQ';
-import BeforeAfter from './BeforeAfter';
 import FinalCTA from './FinalCTA';
 
 interface LandingPageProps {
@@ -133,9 +132,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
         </div>
         </div>
       </div>
-
-      {/* Before/After Showcase */}
-      <BeforeAfter />
 
       {/* Testimonials Section */}
       <Testimonials />
