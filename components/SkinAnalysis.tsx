@@ -482,7 +482,6 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
           type="file"
           id="selfie-upload"
           accept="image/*"
-          capture="user"
           multiple
           className="sr-only"
           onChange={handleFileChange}
