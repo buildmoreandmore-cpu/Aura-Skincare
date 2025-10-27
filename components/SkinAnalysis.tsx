@@ -182,12 +182,42 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
       console.log('Compressed base64 length:', compressedBase64.length);
       console.log('Compression ratio:', ((1 - compressedBase64.length / file.size) * 100).toFixed(2) + '%');
 
-      // Save to database with compressed image
+      // Convert base64 to blob for Supabase Storage
+      const base64Response = await fetch(compressedBase64);
+      const blob = await base64Response.blob();
+
+      // Upload to Supabase Storage
+      const fileName = `${user.id}/${Date.now()}.jpg`;
+      console.log('Uploading to storage:', fileName);
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('skin-journey-photos')
+        .upload(fileName, blob, {
+          contentType: 'image/jpeg',
+          upsert: false
+        });
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw new Error(`Upload failed: ${uploadError.message}`);
+      }
+
+      console.log('Upload successful:', uploadData);
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('skin-journey-photos')
+        .getPublicUrl(fileName);
+
+      const imageUrl = urlData.publicUrl;
+      console.log('Public URL:', imageUrl);
+
+      // Save to database with image URL
       const { data, error: dbError } = await supabase
         .from('skin_journey')
         .insert({
           user_id: user.id,
-          image_url: compressedBase64,
+          image_url: imageUrl,
           analysis_result: result
         })
         .select();
