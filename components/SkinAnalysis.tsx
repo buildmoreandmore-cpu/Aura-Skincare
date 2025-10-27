@@ -109,6 +109,44 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
     }
   };
 
+  const compressImage = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+
+          // Resize to max 800px width/height while maintaining aspect ratio
+          let width = img.width;
+          let height = img.height;
+          const maxSize = 800;
+
+          if (width > height && width > maxSize) {
+            height = (height * maxSize) / width;
+            width = maxSize;
+          } else if (height > maxSize) {
+            width = (width * maxSize) / height;
+            height = maxSize;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx?.drawImage(img, 0, 0, width, height);
+
+          // Convert to JPEG with 0.7 quality for good compression
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+          resolve(compressedBase64);
+        };
+        img.onerror = reject;
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   const saveToJourney = async () => {
     console.log('Save button clicked');
     console.log('User:', user);
@@ -136,24 +174,20 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
     try {
       console.log('Starting save process...');
 
-      // Convert image to base64 and save directly to database
+      // Compress image before saving
       const file = images[0].file;
-      const reader = new FileReader();
+      console.log('Original file size:', file.size);
 
-      const base64Image = await new Promise<string>((resolve, reject) => {
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
+      const compressedBase64 = await compressImage(file);
+      console.log('Compressed base64 length:', compressedBase64.length);
+      console.log('Compression ratio:', ((1 - compressedBase64.length / file.size) * 100).toFixed(2) + '%');
 
-      console.log('Image converted to base64, length:', base64Image.length);
-
-      // Save to database with base64 image
+      // Save to database with compressed image
       const { data, error: dbError } = await supabase
         .from('skin_journey')
         .insert({
           user_id: user.id,
-          image_url: base64Image,
+          image_url: compressedBase64,
           analysis_result: result
         })
         .select();
