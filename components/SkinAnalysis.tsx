@@ -32,6 +32,7 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
   const [savedPhotos, setSavedPhotos] = useState<SavedPhoto[]>([]);
   const [showJourney, setShowJourney] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
+  const [cityName, setCityName] = useState<string>('');
   const location = useGeolocation();
   const { user } = useAuth();
 
@@ -41,6 +42,26 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
       loadSavedPhotos();
     }
   }, [user]);
+
+  // Fetch city name when location is available
+  useEffect(() => {
+    const getCityName = async () => {
+      if (location.latitude && location.longitude) {
+        try {
+          const response = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${location.latitude}&longitude=${location.longitude}&localityLanguage=en`
+          );
+          const data = await response.json();
+          const city = data.city || data.locality || 'Your location';
+          const region = data.principalSubdivision || '';
+          setCityName(region ? `${city}, ${region}` : city);
+        } catch {
+          setCityName('Your location');
+        }
+      }
+    };
+    getCityName();
+  }, [location.latitude, location.longitude]);
 
   const loadSavedPhotos = async () => {
     if (!user) return;
@@ -339,6 +360,7 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
           type="file"
           id="selfie-upload"
           accept="image/*"
+          capture="user"
           multiple
           className="sr-only"
           onChange={handleFileChange}
@@ -365,11 +387,53 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
           {loading ? 'Analyzing...' : 'Analyze My Skin'}
         </button>
       </div>
-      
+
+      {/* Environmental Context Display */}
+      {images.length > 0 && !loading && !result && (
+        <div className="mt-4 p-4 bg-gradient-to-r from-cyan-50 to-blue-50 rounded-xl border border-cyan-200">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 text-cyan-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-900">
+                {location.latitude && location.longitude && cityName ? (
+                  <>
+                    📍 Analyzing from: <span className="text-cyan-600">{cityName}</span>
+                  </>
+                ) : (
+                  <>
+                    📍 Location access {location.error ? 'disabled' : 'detecting...'}
+                  </>
+                )}
+              </p>
+              <p className="text-xs text-gray-600 mt-1">
+                {location.latitude && location.longitude ? (
+                  "We'll factor in your local climate, humidity, and pollution levels for personalized recommendations."
+                ) : (
+                  "Enable location for environmental insights tailored to your area."
+                )}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {location.error && <p className="mt-4 text-center text-orange-500 text-sm">Note: {location.error} Providing general environmental advice.</p>}
       {error && <p className="mt-4 text-center text-red-500">{error}</p>}
 
-      {loading && <LoadingSpinner />}
+      {loading && (
+        <div className="mt-8">
+          <LoadingSpinner />
+          <p className="text-center mt-4 text-gray-600 animate-pulse">
+            Analyzing your skin with AI...
+          </p>
+          <p className="text-center text-sm text-gray-500 mt-2">
+            This may take a few seconds
+          </p>
+        </div>
+      )}
 
       {result && !loading && (
         <div className="mt-8 bg-white p-6 rounded-xl shadow-lg animate-fade-in">

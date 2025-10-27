@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Testimonials from './Testimonials';
 import FAQ from './FAQ';
 import FinalCTA from './FinalCTA';
 import QuestionnaireModal from './QuestionnaireModal';
@@ -43,7 +42,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
 
           {/* Hero Content */}
           <div className="mt-20 md:mt-32 text-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <h1 className="text-5xl md:text-7xl font-extralight tracking-tight text-gray-900 leading-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extralight tracking-tight text-gray-900 leading-tight">
               Your skin,
               <br />
               <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent font-light">
@@ -51,7 +50,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
               </span>
             </h1>
 
-            <p className="mt-8 text-xl md:text-2xl text-gray-600 font-light max-w-3xl mx-auto leading-relaxed">
+            <p className="mt-8 text-lg md:text-xl lg:text-2xl text-gray-600 font-light max-w-3xl mx-auto leading-relaxed">
               Advanced AI technology meets personalized skincare.
               <br />
               Discover your perfect routine in seconds.
@@ -134,9 +133,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
         </div>
         </div>
       </div>
-
-      {/* Testimonials Section */}
-      <Testimonials />
 
       {/* FAQ Section */}
       <FAQ />

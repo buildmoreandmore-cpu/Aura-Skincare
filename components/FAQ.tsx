@@ -112,7 +112,7 @@ const FAQ: React.FC = () => {
             Still have questions?
           </p>
           <a
-            href="mailto:support@aura-skincare.com"
+            href="mailto:hello@aura-skincare.com"
             className="inline-flex items-center gap-2 text-cyan-500 hover:text-cyan-600 font-medium transition-colors"
           >
             Contact our support team
