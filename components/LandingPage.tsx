@@ -19,11 +19,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
         {/* Cinematic Background Image */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1920&h=1080&fit=crop&auto=format"
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1920&h=1080&fit=crop&auto=format&blur=20"
             alt="Editorial beauty aesthetic"
-            className="w-full h-full object-cover opacity-30"
+            className="w-full h-full object-cover opacity-40 blur-sm"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-cyan-50/40 to-white" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/75 via-white/50 to-white" />
         </div>
 
         {/* Content */}
