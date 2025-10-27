@@ -549,7 +549,7 @@ const SkinAnalysis: React.FC<SkinAnalysisProps> = ({ onAnalysisComplete }) => {
         <div className="mt-8">
           <LoadingSpinner />
           <p className="text-center mt-4 text-gray-600 animate-pulse">
-            Analyzing your skin with AI...
+            Our AI is examining your skin...
           </p>
           <p className="text-center text-sm text-gray-500 mt-2">
             This may take a few seconds
